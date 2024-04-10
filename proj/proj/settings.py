@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_extensions',
     # Internal apps
     'users',
+    'control_access',
 ]
 
 MIDDLEWARE = [
