@@ -1,6 +1,7 @@
 from datetime import time
 import logging
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -26,7 +27,9 @@ class RFIDTag(BaseModel):
     # class Meta:
     #     indexes = [models.Index(fields=["owner"])]
 
-    created_by = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name="created_tags")
+    created_by = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, related_name="created_tags"
+    )
     tag_id = models.CharField(max_length=20, primary_key=True)
     owner = models.CharField(_("owner"), max_length=150)
     description = models.TextField(default="", blank=True)
@@ -49,9 +52,28 @@ class RFIDTag(BaseModel):
         Returns:
             True for valid Tag ID and correct period of time, False otherwise.
         """
-        check = self.active and (self.valid_range_start <= time_value <= self.valid_range_end)
+        check = self.active and (
+            self.valid_range_start <= time_value <= self.valid_range_end
+        )
         logger.debug(f"RFID Tag is valid={check}")
         return check
+
+    def check_valid_range(self) -> bool:
+        return self.valid_range_start < self.valid_range_end
+
+    def clean(self):
+        """Method to perform model-level validation."""
+        if not self.check_valid_range():
+            raise ValidationError(
+                {
+                    "valid_range_start": ValidationError(
+                        _("valid_range_start must be before valid_range_end.")
+                    ),
+                    "valid_range_end": ValidationError(
+                        _("valid_range_end must be after valid_range_start.")
+                    ),
+                }
+            )
 
     def __str__(self) -> str:
         return f"{self.tag_id}"
@@ -59,6 +81,9 @@ class RFIDTag(BaseModel):
 
 class LogTag(models.Model):
     """Audit or log the event when the card is used"""
-    rfid_tag = models.ForeignKey(RFIDTag, on_delete=models.CASCADE, related_name="rfid_tags")
+
+    rfid_tag = models.ForeignKey(
+        RFIDTag, on_delete=models.CASCADE, related_name="rfid_tags"
+    )
     access_date = models.DateTimeField(default=timezone.now)
     allowed = models.BooleanField()
