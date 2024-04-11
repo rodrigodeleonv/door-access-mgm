@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-# from access_control.urls import router as access_control_router
 from users import views
 
 router = routers.DefaultRouter()
