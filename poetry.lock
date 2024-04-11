@@ -60,6 +60,20 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "djangorestframework"
+version = "3.15.1"
+description = "Web APIs for Django, made easy."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "djangorestframework-3.15.1-py3-none-any.whl", hash = "sha256:3ccc0475bce968608cf30d07fb17d8e52d1d7fc8bfe779c905463200750cbca6"},
+    {file = "djangorestframework-3.15.1.tar.gz", hash = "sha256:f88fad74183dfc7144b2756d0d2ac716ea5b4c7c9840995ac3bfd8ec034333c1"},
+]
+
+[package.dependencies]
+django = ">=3.0"
+
+[[package]]
 name = "iniconfig"
 version = "2.0.0"
 description = "brain-dead simple config-ini parsing"
@@ -175,4 +189,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10, ^3.11"
-content-hash = "1ec7a1ffd335750438baf21c387d6aa266c6e07d0600f7dd4ed2e14bba694bf1"
+content-hash = "f1cf75d0b0169a302a5757cc9a18427362d02f13b7b0a1aafbf3eab96525e603"
