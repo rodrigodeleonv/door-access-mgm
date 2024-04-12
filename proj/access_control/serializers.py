@@ -19,3 +19,7 @@ class RFIDTagSerializer(serializers.ModelSerializer):
             f"{instance.created_by.first_name} {instance.created_by.last_name}"
         )
         return representation
+
+
+class AccessControlSerializer(serializers.Serializer):
+    tag_id = serializers.CharField()

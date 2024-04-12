@@ -27,8 +27,10 @@ SECRET_KEY = config("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = config(
+    "DJANGO_ALLOWED_HOSTS",
+    cast=lambda v: [s.strip() for s in v.split(",")]
+)
 
 # Application definition
 
@@ -147,3 +149,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50
 }
+
+
+#
+# SHOW EXTRA INFO
+#
+
+print(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
