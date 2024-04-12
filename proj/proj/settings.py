@@ -138,7 +138,7 @@ AUTH_USER_MODEL = 'users.User'
 
 #
 # DRF CONFIGURATION
-
+#
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -149,6 +149,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50
 }
+
+
+#
+# Raspbery Pi CONFIGURATION
+#
+
+RPI_GPIO_PIN_OPEN = 17
+RPI_TIME_SIGNAL_OPEN = 1
 
 
 #
