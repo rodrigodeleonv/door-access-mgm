@@ -1,10 +1,14 @@
 import logging
+
+from django.conf import settings
+from django.utils import timezone
 from rest_framework import permissions, viewsets, status
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
 from . import models, serializers
+from scripts.rpi_gpio import open_door
 
 
 # from rest_framework.viewsets import ViewSet
@@ -56,15 +60,30 @@ class AccessDoor(APIView):
         tag_id = request.data.get("tag_id")
         logger.debug(f"Tag ID received: {tag_id}")
         try:
-            models.RFIDTag.objects.get(tag_id="123456789")
+            tag = models.RFIDTag.objects.get(tag_id=tag_id)
         except models.RFIDTag.DoesNotExist:
             return Response(
                 {"message": f"Tag ID: {tag_id} not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
         #
         # TODO: Process Tag ID to grant access
         #
+
+        current_time = timezone.now().time()
+        can_access = tag.check_access(current_time)
+        print(f"can_access={can_access}")
+        if can_access:
+            logger.info(f"Allowing access to Tag ID: {tag_id}")
+            open_door(settings.RPI_GPIO_PIN_OPEN, settings.RPI_TIME_SIGNAL_OPEN)
+        else:
+            logger.info(f"Denying access to Tag ID: {tag_id}")
+
+        #
+        #
+        #
+
         return Response(
             {"message": f"Tag ID: {tag_id} received successfully"},
             status=status.HTTP_201_CREATED,

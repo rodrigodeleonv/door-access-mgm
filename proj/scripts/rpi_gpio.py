@@ -8,7 +8,12 @@ logger = logging.getLogger(__name__)
 
 
 def open_door(pin_number: int, time_signal_open: int) -> None:
-    """Produce the signal to open the door.
+    """Produce the signal to open the door. Setup the GPIO must occur before.
+
+    WARNING: This functions is blocking operation and can block the server
+    for time_signal_open seconds. It's possible to use directly with Django or
+    you can configure something like Celery. If you use directly with Django
+    remember it block a while the request for  processing in the view.
 
     Args:
         pin_number: GPIO pin number
