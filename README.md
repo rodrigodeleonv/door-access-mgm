@@ -7,6 +7,18 @@ Features:
 Admin interface to manage Users, RFID Tags, ...
 API to conect with external RDIF Reader service
 
+## Dev
+
+```bash
+poetry export -f requirements.txt --output requirements-prod.txt --without-hashes
+docker build -t rodmosh/door-access-mgm .
+docker run --privileged --rm -p 8000:8000 \
+    --device /dev/gpiomem \
+    -e DJANGO_SECRET_KEY='django-insecure-yck2)0pdsmgl=!&l*1t0w5!6h9)*@*&v)$%a8(07@8-+=!gvd9' \
+    -e DJANGO_ALLOWED_HOSTS='*' \
+    rodmosh/door-access-mgm gunicorn --pythonpath ./proj proj.wsgi --bind 0.0.0.0:8000
+```
+
 ## Notes with Raspberry Pi and GPIO
 
 Docker Access to Raspberry Pi GPIO Pins
