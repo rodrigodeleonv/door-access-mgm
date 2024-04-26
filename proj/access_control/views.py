@@ -1,14 +1,12 @@
 import logging
 
-from django.conf import settings
-from django.utils import timezone
 from rest_framework import permissions, viewsets, status
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
 from . import models, serializers
-from scripts.rpi_gpio import open_door
+from scripts.access_control_mgm import access_validation
 
 
 # from rest_framework.viewsets import ViewSet
@@ -63,28 +61,18 @@ class AccessDoor(APIView):
             tag = models.RFIDTag.objects.get(tag_id=tag_id)
         except models.RFIDTag.DoesNotExist:
             return Response(
-                {"message": f"Tag ID: {tag_id} not found"},
+                {"message": f"Tag ID: {tag_id} access denied (not found)"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        #
-        # TODO: Process Tag ID to grant access
-        #
-
-        current_time = timezone.now().time()
-        can_access = tag.check_access(current_time)
-        print(f"can_access={can_access}")
-        if can_access:
-            logger.info(f"Allowing access to Tag ID: {tag_id}")
-            open_door(settings.RPI_GPIO_PIN_OPEN, settings.RPI_TIME_SIGNAL_OPEN)
-        else:
-            logger.info(f"Denying access to Tag ID: {tag_id}")
-
-        #
-        #
-        #
-
+        can_access = access_validation(tag)
+        if can_access is False:
+            msg = "access granted" if can_access else "access denied (UNAUTHORIZED)"
+            return Response(
+                {"message": f"Tag ID: {tag_id} {msg}."},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
         return Response(
-            {"message": f"Tag ID: {tag_id} received successfully"},
-            status=status.HTTP_201_CREATED,
+            {"message": f"Tag ID: {tag_id} access granted"},
+            status=status.HTTP_202_ACCEPTED,
         )
