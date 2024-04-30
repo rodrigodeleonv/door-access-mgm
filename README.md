@@ -1,11 +1,16 @@
-# door-access-mgm
+# Web Door Access Management
 
-Web interface to configure Door access.
+Web interface to configure Laboratory door access.
+This web application is made for Raspberry Pi devices. It use the GPIOs.
 
 Features:
 
-Admin interface to manage Users, RFID Tags, ...
-API to conect with external RDIF Reader service
+- Admin interface to manage Users, RFID Tags, ...
+- API to conect with external RDIF Reader service
+
+![Diagram 1](/docs/images/lab-door-system.drawio.png)
+
+## Install
 
 ## Dev
 
