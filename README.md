@@ -15,13 +15,18 @@ Features:
 ## Dev
 
 ```bash
+# Build image
 poetry export -f requirements.txt --output requirements-prod.txt --without-hashes
+python proj/manage.py collectstatic --noinput
 docker build -t rodmosh/door-access-mgm .
 docker run --privileged --rm -p 8000:8000 \
     --device /dev/gpiomem \
     -e DJANGO_SECRET_KEY='django-insecure-yck2)0pdsmgl=!&l*1t0w5!6h9)*@*&v)$%a8(07@8-+=!gvd9' \
     -e DJANGO_ALLOWED_HOSTS='*' \
     rodmosh/door-access-mgm gunicorn --pythonpath ./proj proj.wsgi --bind 0.0.0.0:8000
+
+# Dev webserver
+python proj/manage.py runserver 0.0.0.0:8000
 ```
 
 ## Notes with Raspberry Pi and GPIO
