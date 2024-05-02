@@ -27,9 +27,11 @@ services:
       - "443:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./caddy_data:/data
-      - ./caddy_config:/config
+      - caddy_data:/data
+      - caddy_config:/config
       - static_volume:/var/www/static
 
 volumes:
   static_volume: {}
+  caddy_data: {}
+  caddy_config: {}
