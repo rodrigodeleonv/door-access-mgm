@@ -2,7 +2,8 @@
   auto_https off
   log {
     output stdout
-    level DEBUG
+    # level DEBUG
+    level INFO
   }
 }
 
