@@ -15,25 +15,35 @@ Features:
 ## Dev
 
 ```bash
-# Build image
+# Docker
+
+## Build & tag image
 poetry export -f requirements.txt --output requirements-prod.txt --without-hashes
-python proj/manage.py collectstatic --noinput
-docker build -t rodmosh/door-access-mgm .
-rm -rf ./static/*
+docker build -t rodmosh/door-access-mgm:0.1.0 . \
+&& docker push rodmosh/door-access-mgm:0.1.0 \
+&& docker tag rodmosh/door-access-mgm:0.1.0 rodmosh/door-access-mgm:latest \
+&& docker push rodmosh/door-access-mgm:latest \
+&& docker tag rodmosh/door-access-mgm:0.1.0 rodmosh/door-access-mgm:production \
+&& docker push rodmosh/door-access-mgm:production
+
+# PostreSQL
+docker run --rm --name pg \
+    -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=postgres \
+    -p 5432:5432 -d \
+    postgres:16-alpine
+
+# Django
 docker run --privileged --rm -p 8000:8000 \
     --device /dev/gpiomem \
     -e DJANGO_SECRET_KEY='django-insecure-yck2)0pdsmgl=!&l*1t0w5!6h9)*@*&v)$%a8(07@8-+=!gvd9' \
     -e DJANGO_ALLOWED_HOSTS='*' \
     rodmosh/door-access-mgm gunicorn --pythonpath ./proj proj.wsgi --bind 0.0.0.0:8000
 
-# Dev webserver
-python proj/manage.py runserver 0.0.0.0:8000
 
-# Docker Postgres container
-docker run --rm --name pg \
-    -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=postgres \
-    -p 5432:5432 -d \
-    postgres:16-alpine
+# Local
+
+## Dev webserver
+python proj/manage.py runserver 0.0.0.0:8000
 ```
 
 ## Notes with Raspberry Pi and GPIO

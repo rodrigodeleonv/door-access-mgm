@@ -5,7 +5,7 @@ services:
   web_app:
     depends_on:
       - dbserver
-    image: rodmosh/door-access-mgm
+    image: rodmosh/door-access-mgm:production
     privileged: true
     devices:
       - "/dev/gpiomem"
