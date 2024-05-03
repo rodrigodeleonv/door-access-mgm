@@ -3,6 +3,8 @@
 services:
 
   web_app:
+    depends_on:
+      - dbserver
     image: rodmosh/door-access-mgm
     command: gunicorn --pythonpath ./proj proj.wsgi --bind 0.0.0.0:8000
     privileged: true
