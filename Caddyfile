@@ -1,0 +1,27 @@
+{
+  auto_https off
+  log {
+    output stdout
+    # level DEBUG
+    level INFO
+  }
+}
+
+:80, :443 {
+  tls internal {
+    on_demand
+  }
+
+  @static {
+    path /static/*
+  }
+
+  handle @static {
+    # Do not append ../static to the path
+    root * /var/www
+    file_server browse
+  }
+
+  reverse_proxy web_app:8000
+  encode gzip
+}

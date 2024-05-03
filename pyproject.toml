@@ -14,6 +14,7 @@ djangorestframework = "^3.15.1"
 
 rpi-gpio = { version = "^0.7.1", markers = "sys_platform == 'linux' and (platform_machine == 'armv6l' or platform_machine == 'armv7l' or platform_machine == 'aarch64')" }
 gunicorn = "^22.0.0"
+psycopg2-binary = "^2.9.9"
 
 
 [tool.poetry.group.dev.dependencies]
