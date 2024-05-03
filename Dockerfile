@@ -16,9 +16,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./proj ./proj
 
-# Give problems with GPIO in build phase
-# RUN python proj/manage.py collectstatic --noinput
-
 ENTRYPOINT ["./entrypoint.sh"]
 CMD ["gunicorn", "--pythonpath", "./proj", "proj.wsgi", "--bind", "0.0.0.0:8000"]
 EXPOSE 8000
