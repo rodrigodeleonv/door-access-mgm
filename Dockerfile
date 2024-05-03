@@ -23,10 +23,8 @@ COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/pytho
 COPY ./entrypoint.sh ./
 COPY ./proj ./proj
 
-RUN apt-get update && apt-get install -y netcat
-
-# RUN useradd -m myuser
-# USER myuser
+RUN apt-get update && apt-get install -y netcat \
+    && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8000
 
