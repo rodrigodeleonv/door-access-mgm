@@ -19,6 +19,7 @@ Features:
 poetry export -f requirements.txt --output requirements-prod.txt --without-hashes
 python proj/manage.py collectstatic --noinput
 docker build -t rodmosh/door-access-mgm .
+rm -rf ./static/*
 docker run --privileged --rm -p 8000:8000 \
     --device /dev/gpiomem \
     -e DJANGO_SECRET_KEY='django-insecure-yck2)0pdsmgl=!&l*1t0w5!6h9)*@*&v)$%a8(07@8-+=!gvd9' \
@@ -27,6 +28,12 @@ docker run --privileged --rm -p 8000:8000 \
 
 # Dev webserver
 python proj/manage.py runserver 0.0.0.0:8000
+
+# Docker Postgres container
+docker run --rm --name pg \
+    -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=postgres \
+    -p 5432:5432 -d \
+    postgres:16-alpine
 ```
 
 ## Notes with Raspberry Pi and GPIO
