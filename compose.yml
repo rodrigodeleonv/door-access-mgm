@@ -35,6 +35,18 @@ services:
     networks:
       - door_net
 
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=example_password
+      - POSTGRES_DB=example_db
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
 volumes:
   static_volume: {}
   caddy_data: {}
