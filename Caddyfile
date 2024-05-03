@@ -22,6 +22,6 @@
     file_server browse
   }
 
-  reverse_proxy web-door-access:8000
+  reverse_proxy web_app:8000
   encode gzip
 }

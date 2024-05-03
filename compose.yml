@@ -2,7 +2,7 @@
 
 services:
 
-  web-door-access:
+  web_app:
     image: rodmosh/door-access-mgm
     command: gunicorn --pythonpath ./proj proj.wsgi --bind 0.0.0.0:8000
     privileged: true
@@ -21,7 +21,7 @@ services:
 
   webserver:
     depends_on:
-      - web-door-access
+      - web_app
     image: caddy:2.7.6-alpine
     restart: unless-stopped
     ports:
