@@ -11,7 +11,7 @@ from scripts.access_control_mgm import access_validation
 
 # from rest_framework.viewsets import ViewSet
 # from rest_framework.decorators import action
-from users.models import User
+# from users.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,8 @@ class RFIDTagViewSet(viewsets.ModelViewSet):
 
     queryset = models.RFIDTag.objects.select_related("created_by").order_by("tag_id")
     serializer_class = serializers.RFIDTagSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
 
 
 # class AccessControlViewSet(ViewSet):
@@ -44,14 +45,13 @@ class AccessDoor(APIView):
     """ """
 
     # authentication_classes = [authentication.TokenAuthentication]
-    # permission_classes = [permissions.IsAdminUser]
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # permission_classes = [permissions.AllowAny]
 
-    def get(self, request: Request):
-        """Temporal."""
-        usernames = [user.email for user in User.objects.all()]
-        return Response(usernames)
+    # def get(self, request: Request):
+    #     """Temporal."""
+    #     usernames = [user.email for user in User.objects.all()]
+    #     return Response(usernames)
 
     def post(self, request: Request):
         """Process Tag ID in order to grant access."""
