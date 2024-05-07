@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG = config("DJANGO_DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = config(
     "DJANGO_ALLOWED_HOSTS",
@@ -152,8 +152,6 @@ AUTH_USER_MODEL = 'users.User'
 #
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ],
@@ -175,3 +173,4 @@ RPI_TIME_SIGNAL_OPEN = 1
 #
 
 print(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
+print(f"DEBUG: {DEBUG}")

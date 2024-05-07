@@ -40,9 +40,10 @@ docker run --privileged --rm -p 8000:8000 \
     rodmosh/door-access-mgm gunicorn --pythonpath ./proj proj.wsgi --bind 0.0.0.0:8000
 
 
-# Local
+# Local Dev
 
-## Dev webserver
+docker compose -f compose.local.yml up -d
+python proj/manage.py migrate
 python proj/manage.py runserver 0.0.0.0:8000
 ```
 
