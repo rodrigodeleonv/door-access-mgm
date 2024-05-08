@@ -20,13 +20,13 @@ python -c 'from django.core.management.utils import get_random_secret_key; print
 
 ## MANDATORY: create .prod.env and modify the values
 cp example.env .prod.env
-
-## Optional: Provisioning: just for the first time
 ## Recommended edit `.prod.env` and add superuser email and password
-vi .prod.env
+
+## Optional Provisioning: just for the first time
 ## Provision RFID tags
-cp tags.example.json tags.json
-vi .prod.env
+## folder: ./provision/
+cp provision/tags.example.json provision/tags.json
+vi provision/tags.json
 
 ## Deploy
 docker compose --env-file .prod.env up -d

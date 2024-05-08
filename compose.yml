@@ -18,6 +18,7 @@ services:
     volumes:
       - static_volume:/app_root/static
       - log_data:/var/log/app
+      - ./provision:/app_root/provision:ro
     networks:
       - door_net
 
@@ -57,6 +58,7 @@ volumes:
   caddy_config: {}
   postgres_data: {}
   log_data: {}
+
 
 networks:
   door_net:

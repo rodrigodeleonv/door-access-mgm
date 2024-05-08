@@ -37,7 +37,7 @@ def provison_tags() -> None:
     """Provision Tags from JSON file."""
     logger.info("Provision RFID Tags")
     sup = User.objects.filter(is_superuser=True).first()
-    with open("tags.json") as f:
+    with open("provision/tags.json") as f:
         tags = json.load(f)
     for tag in tags["tags"]:
         tag_id = tag["tag_id"].strip()
