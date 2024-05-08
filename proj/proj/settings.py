@@ -152,6 +152,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom user model
 AUTH_USER_MODEL = 'users.User'
 
+
+#
+# Reverse proxy configuration for HTTPS
+#
+
+# Use the 'X-Forwarded-Proto' header to determine the scheme for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# Considera la solicitud segura si viene a través de un proxy, incluso si 'X-Forwarded-Proto' no es 'https'
+# SECURE_SSL_REDIRECT = False
+# Solo establece cookies seguras si estás totalmente bajo HTTPS.
+# Desactívalo si tienes mezcla de contenido HTTP y HTTPS, pero es más seguro tenerlo activo en producción.
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# Asegúrate de que el dominio en tus cookies CSRF está correctamente configurado, especialmente útil si estás utilizando subdominios.
+# CSRF_TRUSTED_ORIGINS = ['https://']
+
+
 # Logging
 LOGGING = logger_setup(LOG_DIR, LOG_LEVEL)
 
