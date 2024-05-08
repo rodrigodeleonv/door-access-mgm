@@ -36,12 +36,17 @@ def provision_superuser() -> None:
 def provison_tags() -> None:
     """Provision Tags from JSON file."""
     logger.info("Provision RFID Tags")
+    sup = User.objects.filter(is_superuser=True).first()
     with open("tags.json") as f:
         tags = json.load(f)
     for tag in tags["tags"]:
         tag_id = tag["tag_id"].strip()
-        _, created = RFIDTag.objects.get_or_create(tag_id=tag_id)
-        if created:
+        description = tag["description"].strip()
+
+        if not RFIDTag.objects.filter(tag_id=tag_id).exists():
+            RFIDTag.objects.create(
+                tag_id=tag_id, description=description, created_by=sup
+            )
             logger.info(f"Tag {tag_id} created")
 
 
