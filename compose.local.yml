@@ -1,6 +1,6 @@
 services:
 
-  dbserver:
+  dbserver-dev:
     image: postgres:16-alpine
     restart: no
     environment:
