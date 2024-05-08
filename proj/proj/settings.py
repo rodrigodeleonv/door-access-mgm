@@ -14,6 +14,8 @@ from pathlib import Path
 
 from decouple import config
 
+from proj.logconf import logger_setup
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,6 +33,9 @@ ALLOWED_HOSTS = config(
     "DJANGO_ALLOWED_HOSTS",
     cast=lambda v: [s.strip() for s in v.split(",")]
 )
+
+LOG_DIR = config("DJANGO_LOG_DIR")
+LOG_LEVEL = config("DJANGO_LOG_LEVEL")
 
 # Application definition
 
@@ -147,6 +152,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom user model
 AUTH_USER_MODEL = 'users.User'
 
+# Logging
+LOGGING = logger_setup(LOG_DIR, LOG_LEVEL)
 
 #
 # DRF CONFIGURATION
@@ -179,4 +186,6 @@ RPI_TIME_SIGNAL_OPEN = 1
 #
 
 print(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
+print(f"LOG_DIR: {LOG_DIR}")
+print(f"LOG_LEVEL: {LOG_LEVEL}")
 print(f"DEBUG: {DEBUG}")
