@@ -14,9 +14,11 @@ services:
     expose:
       - 8000
     env_file:
-      - .env
+      - .prod.env
     volumes:
       - static_volume:/app_root/static
+      - log_data:/var/log/app
+      - ./provision:/app_root/provision:ro
     networks:
       - door_net
 
@@ -45,8 +47,6 @@ services:
       - POSTGRES_DB=db_proj
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    # ports:
-    #   - 5432:5432
     expose:
       - 5432
     networks:
@@ -57,6 +57,8 @@ volumes:
   caddy_data: {}
   caddy_config: {}
   postgres_data: {}
+  log_data: {}
+
 
 networks:
   door_net:

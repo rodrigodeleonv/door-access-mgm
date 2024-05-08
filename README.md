@@ -12,6 +12,26 @@ Features:
 
 ## Install
 
+```bash
+# Previous steps
+
+## MANDATORY: generate a secret key
+python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+
+## MANDATORY: create .prod.env and modify the values
+cp example.env .prod.env
+## Recommended edit `.prod.env` and add superuser email and password
+
+## Optional Provisioning: just for the first time
+## Provision RFID tags
+## folder: ./provision/
+cp provision/tags.example.json provision/tags.json
+vi provision/tags.json
+
+## Deploy
+docker compose --env-file .prod.env up -d
+```
+
 ## Dev
 
 ```bash
@@ -19,11 +39,11 @@ Features:
 
 ## Build & tag image
 poetry export -f requirements.txt --output requirements-prod.txt --without-hashes
-docker build -t rodmosh/door-access-mgm:0.1.0 . \
-&& docker push rodmosh/door-access-mgm:0.1.0 \
-&& docker tag rodmosh/door-access-mgm:0.1.0 rodmosh/door-access-mgm:latest \
+docker build -t rodmosh/door-access-mgm:0.2.0 . \
+&& docker push rodmosh/door-access-mgm:0.2.0 \
+&& docker tag rodmosh/door-access-mgm:0.2.0 rodmosh/door-access-mgm:latest \
 && docker push rodmosh/door-access-mgm:latest \
-&& docker tag rodmosh/door-access-mgm:0.1.0 rodmosh/door-access-mgm:production \
+&& docker tag rodmosh/door-access-mgm:0.2.0 rodmosh/door-access-mgm:production \
 && docker push rodmosh/door-access-mgm:production
 
 # PostreSQL
@@ -40,9 +60,10 @@ docker run --privileged --rm -p 8000:8000 \
     rodmosh/door-access-mgm gunicorn --pythonpath ./proj proj.wsgi --bind 0.0.0.0:8000
 
 
-# Local
+# Local Dev
 
-## Dev webserver
+docker compose -f compose.local.yml up -d
+python proj/manage.py migrate
 python proj/manage.py runserver 0.0.0.0:8000
 ```
 

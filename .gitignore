@@ -1,5 +1,7 @@
 .vscode/*
 static/*
+.*env
+tags.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

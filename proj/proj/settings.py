@@ -14,6 +14,8 @@ from pathlib import Path
 
 from decouple import config
 
+from proj.logconf import logger_setup
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,12 +27,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG = config("DJANGO_DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = config(
     "DJANGO_ALLOWED_HOSTS",
     cast=lambda v: [s.strip() for s in v.split(",")]
 )
+
+LOG_DIR = config("DJANGO_LOG_DIR")
+LOG_LEVEL = config("DJANGO_LOG_LEVEL")
 
 # Application definition
 
@@ -44,6 +49,7 @@ INSTALLED_APPS = [
     # External
     'django_extensions',
     'rest_framework',
+    'rest_framework.authtoken',
     # Internal apps
     'users',
     'access_control',
@@ -148,14 +154,36 @@ AUTH_USER_MODEL = 'users.User'
 
 
 #
+# Reverse proxy configuration for HTTPS
+#
+
+# Use the 'X-Forwarded-Proto' header to determine the scheme for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# Considera la solicitud segura si viene a través de un proxy, incluso si 'X-Forwarded-Proto' no es 'https'
+# SECURE_SSL_REDIRECT = False
+# Solo establece cookies seguras si estás totalmente bajo HTTPS.
+# Desactívalo si tienes mezcla de contenido HTTP y HTTPS, pero es más seguro tenerlo activo en producción.
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# Asegúrate de que el dominio en tus cookies CSRF está correctamente configurado, especialmente útil si estás utilizando subdominios.
+# CSRF_TRUSTED_ORIGINS = ['https://']
+
+
+# Logging
+LOGGING = logger_setup(LOG_DIR, LOG_LEVEL)
+
+#
 # DRF CONFIGURATION
 #
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        # # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.IsAdminUser',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50
@@ -175,3 +203,6 @@ RPI_TIME_SIGNAL_OPEN = 1
 #
 
 print(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
+print(f"LOG_DIR: {LOG_DIR}")
+print(f"LOG_LEVEL: {LOG_LEVEL}")
+print(f"DEBUG: {DEBUG}")

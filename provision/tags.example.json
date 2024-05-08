@@ -1,0 +1,7 @@
+{
+    "description": "Optional. Rename as `tags.json`. Define the tag to be provisioned. You can define multiple tags.",
+    "tags": [
+        {"tag_id": "xxxxxxxxx", "description": ""},
+        {"tag_id": "yyyyyyyyy", "description": ""}
+    ]
+}
