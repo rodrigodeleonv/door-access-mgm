@@ -1,4 +1,5 @@
 """This module control the Raspberry Pi GPIO"""
+
 import logging
 from time import sleep
 
@@ -29,8 +30,9 @@ def open_door(pin_number: int, time_signal_open: int) -> None:
 
 def run():
     from django.conf import settings
-    from access_control.rpi_gpio_conf import setup_gpio, cleanup_gpio
+    from access_control.rpi_gpio_conf import setup_gpio  # , cleanup_gpio
 
     setup_gpio()
     open_door(settings.RPI_GPIO_PIN_OPEN, settings.RPI_TIME_SIGNAL_OPEN)
-    cleanup_gpio()
+    # WARNING: This functions remove the control of the GPIO, so Django main thread will control the GPIO.
+    # cleanup_gpio()
