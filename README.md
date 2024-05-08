@@ -12,6 +12,26 @@ Features:
 
 ## Install
 
+```bash
+# Previous steps
+
+## MANDATORY: generate a secret key
+python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+
+## MANDATORY: create .prod.env and modify the values
+cp example.env .prod.env
+
+## Optional: Provisioning: just for the first time
+## Recommended edit `.prod.env` and add superuser email and password
+vi .prod.env
+## Provision RFID tags
+cp tags.example.json tags.json
+vi .prod.env
+
+## Deploy
+docker compose --env-file .prod.env up -d
+```
+
 ## Dev
 
 ```bash
