@@ -68,9 +68,11 @@ def logger_setup(log_dir: str, log_level: str) -> dict:
                 'class': 'django.utils.log.AdminEmailHandler'
             },
             'file': {
-                'class': 'logging.FileHandler',  # logging.handlers.RotatingFileHanlder
+                'class': 'logging.handlers.RotatingFileHandler',
                 'filename': LOG_DIR / 'app.log',
                 'formatter': 'verbose',
+                'maxBytes': 1024 * 1024 * 5,
+                'backupCount': 10,
                 # 'filters': filter_for_file_handler
             },
         },
