@@ -2,7 +2,7 @@ services:
 
   dbserver:
     image: postgres:16-alpine
-    restart: unless-stopped
+    restart: no
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
