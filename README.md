@@ -39,11 +39,11 @@ docker compose --env-file .prod.env up -d
 
 ## Build & tag image
 poetry export -f requirements.txt --output requirements-prod.txt --without-hashes
-docker build -t rodmosh/door-access-mgm:0.1.0 . \
-&& docker push rodmosh/door-access-mgm:0.1.0 \
-&& docker tag rodmosh/door-access-mgm:0.1.0 rodmosh/door-access-mgm:latest \
+docker build -t rodmosh/door-access-mgm:0.2.0 . \
+&& docker push rodmosh/door-access-mgm:0.2.0 \
+&& docker tag rodmosh/door-access-mgm:0.2.0 rodmosh/door-access-mgm:latest \
 && docker push rodmosh/door-access-mgm:latest \
-&& docker tag rodmosh/door-access-mgm:0.1.0 rodmosh/door-access-mgm:production \
+&& docker tag rodmosh/door-access-mgm:0.2.0 rodmosh/door-access-mgm:production \
 && docker push rodmosh/door-access-mgm:production
 
 # PostreSQL
