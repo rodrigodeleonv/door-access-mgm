@@ -43,8 +43,8 @@ def logger_setup(log_dir: str, log_level: str) -> dict:
                 'style': '{',
             },
             'verbose': {
-                # 'format': '[{levelname} {asctime} {module} {process:d} {thread:d}] > {message}',
-                'format': '[{asctime} {module} {levelname} {lineno}] > {message}',
+                # 'format': '[{levelname} {asctime} {module} {process:d} {thread:d} {lineno}]> {message}',
+                'format': '{levelname} {asctime} {module} {lineno}> {message}',
                 # 'format': '{asctime} {levelname} [{name}:{lineno}] -> {message}',
                 'style': '{',
                 'datefmt': '%Y-%m-%d %H:%M:%S',
