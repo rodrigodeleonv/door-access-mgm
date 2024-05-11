@@ -7,9 +7,13 @@ WORKDIR /app_root
 
 COPY ./requirements-prod.txt ./requirements.txt
 
-# build-essential for RPi.GPIO
+## Install OS dependencies
+# build-essential is needed for RPi.GPIO
+# libpq-dev is for psycopg2-binary only in Raspberry Pi 1B
+##
+
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends build-essential netcat \
+    && apt-get install -y --no-install-recommends build-essential netcat libpq-dev \
     && pip install --no-cache-dir -r requirements.txt \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*

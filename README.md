@@ -12,7 +12,13 @@ Features:
 
 ## Install
 
+Docker & Docker compose
+
 ```bash
+
+git clone https://github.com/rodrigodeleonv/door-access-mgm.git
+docker compose pull
+
 # Previous steps
 
 ## MANDATORY: generate a secret key
@@ -34,6 +40,22 @@ docker compose --env-file .prod.env up -d
 
 ## Dev
 
+Ensure you have Qemu
+
+```bash
+docker run --privileged --rm tonistiigi/binfmt --install all
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+docker buildx ls
+```
+
+Ref:
+- <https://stackoverflow.com/questions/66116587/docker-buildx-mulitarch-armv6>
+- <https://docs.docker.com/build/building/multi-platform/>
+- <https://collabnix.com/building-arm-based-docker-images-on-docker-desktop-made-possible-using-buildx/#Introducing_buildx>
+- <https://devopstales.github.io/linux/running_and_building_multi_arch_containers/>
+
+Remote GPIOs: <https://gpiozero.readthedocs.io/en/stable/remote_gpio.html>
+
 ```bash
 # Docker
 
@@ -42,9 +64,17 @@ poetry export -f requirements.txt --output requirements-prod.txt --without-hashe
 docker build -t rodmosh/door-access-mgm:0.2.0 . \
 && docker push rodmosh/door-access-mgm:0.2.0 \
 && docker tag rodmosh/door-access-mgm:0.2.0 rodmosh/door-access-mgm:latest \
-&& docker push rodmosh/door-access-mgm:latest \
-&& docker tag rodmosh/door-access-mgm:0.2.0 rodmosh/door-access-mgm:production \
+&& docker push rodmosh/door-access-mgm:latest
+
+## For Raspberry Pi 1B with arm6l (32bits): requires qemu
+docker buildx build --platform linux/arm/v6 -t rodmosh/door-access-mgm:rpi1b-0.2.0 --load . \
+&& docker push rodmosh/door-access-mgm:rpi1b-0.2.0 \
+&& docker tag rodmosh/door-access-mgm:rpi1b-0.2.0 rodmosh/door-access-mgm:production \
 && docker push rodmosh/door-access-mgm:production
+
+## Test in your x64 architecture
+docker run -e QEMU_CPU=arm1176 --platform linux/arm/v6 --rm -it python:3.11.9-slim-bullseye uname -m
+docker run --rm -it rodmosh/door-access-mgm:rpi1b-0.2.0 bash
 
 # PostreSQL
 docker run --rm --name pg \
@@ -57,7 +87,7 @@ docker run --privileged --rm -p 8000:8000 \
     --device /dev/gpiomem \
     -e DJANGO_SECRET_KEY='django-insecure-yck2)0pdsmgl=!&l*1t0w5!6h9)*@*&v)$%a8(07@8-+=!gvd9' \
     -e DJANGO_ALLOWED_HOSTS='*' \
-    rodmosh/door-access-mgm gunicorn --pythonpath ./proj proj.wsgi --bind 0.0.0.0:8000
+    rodmosh/door-access-mgm:production gunicorn --pythonpath ./proj proj.wsgi --bind 0.0.0.0:8000
 
 
 # Local Dev
