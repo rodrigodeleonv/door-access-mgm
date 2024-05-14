@@ -45,6 +45,7 @@ Ensure you have Qemu
 ```bash
 docker run --privileged --rm tonistiigi/binfmt --install all
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+ls -lha /proc/sys/fs/binfmt_misc/qemu-*
 docker buildx ls
 ```
 
@@ -64,16 +65,17 @@ Remote GPIOs: <https://gpiozero.readthedocs.io/en/stable/remote_gpio.html>
 ## Raspberry Pi 1B with arm6l (32bits)
 poetry export -f requirements.txt --output requirements-prod.txt --without-hashes
 docker buildx build --platform linux/arm/v6,linux/arm64 \
+    -t rodmosh/door-access-mgm:rpi-0.2.1 \
     -t rodmosh/door-access-mgm:production \
     --push .
 
 ## use --load for add to local registry or --push
-# docker buildx build --platform linux/arm/v6 -t rodmosh/door-access-mgm:rpi1b-0.2.1 --load .
-# docker buildx build --platform linux/arm64 -t rodmosh/door-access-mgm:rpi1b-0.2.1 --push .
+# docker buildx build --platform linux/arm/v6 -t rodmosh/door-access-mgm:rpi-0.2.1 --load .
+# docker buildx build --platform linux/arm64 -t rodmosh/door-access-mgm:rpi-0.2.1 --push .
 
 ## Test architecture (in your x64 processor)
 docker run -e QEMU_CPU=arm1176 --platform linux/arm/v6 --rm -it python:3.11.9-slim-bullseye uname -m
-docker run -e QEMU_CPU=arm1176 --platform linux/arm/v6 --rm -it rodmosh/door-access-mgm:rpi1b-0.2.1 uname -m
+docker run -e QEMU_CPU=arm1176 --platform linux/arm/v6 --rm -it rodmosh/door-access-mgm:rpi-0.2.1 uname -m
 docker run --platform linux/arm64 --rm -it python:3.11.9-slim-bullseye bash
 docker run --platform linux/arm/v8 --rm -it python:3.11.9-slim-bullseye bash
 docker run --rm -it -e ENTRY_SKIP=1 rodmosh/door-access-mgm:production bash
@@ -118,3 +120,7 @@ export PYTHON_KEYRING_BACKEND="keyring.backends.fail.Keyring"
 
 # for permanent add this to ~/.bashrc
 ```
+
+## Qemu
+
+[qemu: uncaught target signal 11 (Segmentation fault) - core dumped](https://github.com/docker/buildx/issues/1170)
