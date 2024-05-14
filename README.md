@@ -64,18 +64,22 @@ Remote GPIOs: <https://gpiozero.readthedocs.io/en/stable/remote_gpio.html>
 ## Raspberry Pi 1B with arm6l (32bits)
 poetry export -f requirements.txt --output requirements-prod.txt --without-hashes
 docker buildx build --platform linux/arm/v6,linux/arm64 \
-    -t rodmosh/door-access-mgm:rpi1b-0.2.1 \
     -t rodmosh/door-access-mgm:production \
     --push .
 
-## --load for add to local registry
-docker buildx build --platform linux/arm/v6 -t rodmosh/door-access-mgm:rpi1b-0.2.1 --load .
-# docker buildx build --platform linux/arm64 -t rodmosh/door-access-mgm:rpi1b-0.2.1 --load .
-
+## use --load for add to local registry or --push
+# docker buildx build --platform linux/arm/v6 -t rodmosh/door-access-mgm:rpi1b-0.2.1 --load .
+# docker buildx build --platform linux/arm64 -t rodmosh/door-access-mgm:rpi1b-0.2.1 --push .
 
 ## Test architecture (in your x64 processor)
 docker run -e QEMU_CPU=arm1176 --platform linux/arm/v6 --rm -it python:3.11.9-slim-bullseye uname -m
 docker run -e QEMU_CPU=arm1176 --platform linux/arm/v6 --rm -it rodmosh/door-access-mgm:rpi1b-0.2.1 uname -m
+docker run --platform linux/arm64 --rm -it python:3.11.9-slim-bullseye bash
+docker run --platform linux/arm/v8 --rm -it python:3.11.9-slim-bullseye bash
+docker run --rm -it -e ENTRY_SKIP=1 rodmosh/door-access-mgm:production bash
+
+## Clean cache
+docker buildx prune -f
 
 # PostreSQL
 docker run --rm --name pg \

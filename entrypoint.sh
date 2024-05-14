@@ -13,7 +13,7 @@ if [ "$ENTRY_SKIP" = "1" ]; then
     exit 0
 fi
 
-echo "Trying to connecto to Database $PG_HOST:$PG_PORT"
+echo "Trying to connect to Database $PG_HOST:$PG_PORT"
 while ! nc -z $PG_HOST $PG_PORT
 do
     echo "Waiting connection..."
