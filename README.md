@@ -124,3 +124,30 @@ export PYTHON_KEYRING_BACKEND="keyring.backends.fail.Keyring"
 ## Qemu
 
 [qemu: uncaught target signal 11 (Segmentation fault) - core dumped](https://github.com/docker/buildx/issues/1170)
+
+## Remote GPIO
+
+<https://gpiozero.readthedocs.io/en/latest/remote_gpio.html>
+
+```bash
+# Use flags -n -l, only allows specific or localhost
+# use no flags or foreground -g, it will allow remote connections
+sudo pigpiod -g
+
+# Service file has -l, that allows only local by default
+# https://raspberrypi.stackexchange.com/a/104441
+cat /lib/systemd/system/pigpiod.service
+```
+
+[How to Run pigpiod on boot](https://raspberrypi.stackexchange.com/questions/70568/how-to-run-pigpiod-on-boot)
+
+```bash
+sudo systemctl enable pigpiod
+sudo systemctl start pigpiod
+sudo pigpiod
+
+sudo netstat -tunpl
+
+sudo systemctl disable pigpiod
+sudo systemctl stop pigpiod
+```
