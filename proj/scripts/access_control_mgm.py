@@ -26,6 +26,7 @@ def access_validation(tag: models.RFIDTag) -> bool:
     if can_access:
         logger.info(f"Allowing access to Tag ID: {tag.tag_id}")
         open_door(settings.RPI_GPIO_PIN_OPEN, settings.RPI_TIME_SIGNAL_OPEN)
+        logger.debug("Door Opened")
     else:
         logger.info(f"Denying access to Tag ID: {tag.tag_id}")
     return can_access

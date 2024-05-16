@@ -1,9 +1,10 @@
-"""This module control the Raspberry Pi GPIO"""
+"""This module control the Raspberry Pi GPIO
+
+Commented out because it's transicional to remote GPIO control.
+"""
 
 import logging
 from time import sleep
-
-import RPi.GPIO as GPIO
 
 logger = logging.getLogger(__name__)
 
@@ -22,17 +23,19 @@ def open_door(pin_number: int, time_signal_open: int) -> None:
             Usually 1 second.
     """
     logger.debug("Send signal to Open the door")
-    GPIO.output(pin_number, GPIO.HIGH)
+    #
+    # TODO: Implement code to open the door
+    #
     sleep(time_signal_open)
     logger.debug("Stop signal to Open the door")
-    GPIO.output(pin_number, GPIO.LOW)
+    #
+    # TODO: Implement code to open the door
+    #
+    raise NotImplementedError("Implement code to open/close the door")
 
 
 def run():
     from django.conf import settings
-    from access_control.rpi_gpio_conf import setup_gpio  # , cleanup_gpio
+    # from access_control.rpi_gpio_conf import setup_gpio  # , cleanup_gpio
 
-    setup_gpio()
     open_door(settings.RPI_GPIO_PIN_OPEN, settings.RPI_TIME_SIGNAL_OPEN)
-    # WARNING: This functions remove the control of the GPIO, so Django main thread will control the GPIO.
-    # cleanup_gpio()

@@ -1,5 +1,7 @@
 """Raspberry Pi GPIO Configuration.
 
+DEPRECTATED
+
 This module configures the Raspberry Pi GPIO.
 
 In development environment, it's possible that this function can be called multiple times.
@@ -24,31 +26,31 @@ REMOVING THE CLEAN UP AT EXIT
 # import atexit
 import logging
 
-from django.conf import settings
-import RPi.GPIO as GPIO
+# from django.conf import settings
+# import RPi.GPIO as GPIO
 
 logger = logging.getLogger(__name__)
 
 
-def setup_gpio() -> None:
-    """Setup GPIO pins for the project.
+# def setup_gpio() -> None:
+#     """Setup GPIO pins for the project.
 
-    This function must be called only once.
-    """
-    logger.info(f"setup the GPIO: PIN {settings.RPI_GPIO_PIN_OPEN}")
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(settings.RPI_GPIO_PIN_OPEN, GPIO.OUT)
+#     This function must be called only once.
+#     """
+#     logger.info(f"setup the GPIO: PIN {settings.RPI_GPIO_PIN_OPEN}")
+#     GPIO.setmode(GPIO.BCM)
+#     GPIO.setup(settings.RPI_GPIO_PIN_OPEN, GPIO.OUT)
 
 
-def cleanup_gpio():
-    """Clean up GPIO pins for the project.
+# def cleanup_gpio():
+#     """Clean up GPIO pins for the project.
 
-    This function must be called only once at the end of the program or
-    the access to the GPIO pins will be lost.
-    """
-    # print("Cleaning up GPIO")
-    logger.info("Cleaning up GPIO")
-    GPIO.cleanup()
+#     This function must be called only once at the end of the program or
+#     the access to the GPIO pins will be lost.
+#     """
+#     # print("Cleaning up GPIO")
+#     logger.info("Cleaning up GPIO")
+#     GPIO.cleanup()
 
 #
 # TODO: Fix. Problem with python proj/manage.py runscript ...

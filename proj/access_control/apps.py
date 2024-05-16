@@ -7,6 +7,6 @@ class AccessControlConfig(AppConfig):
 
     def ready(self):
         """Ensure GPIO is setup before the app is ready."""
-        from access_control.rpi_gpio_conf import setup_gpio
+        # from access_control.rpi_gpio_conf import setup_gpio
 
-        setup_gpio()
+        # setup_gpio()
