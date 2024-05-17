@@ -3,10 +3,9 @@
 import logging
 
 from django.utils import timezone
-from django.conf import settings
 
 from access_control import models
-from scripts.rpi_gpio import open_door
+from access_control.rpi_gpio_conf import get_door
 
 logger = logging.getLogger(__name__)
 
@@ -22,11 +21,10 @@ def access_validation(tag: models.RFIDTag) -> bool:
     """
     current_time = timezone.now().time()
     can_access = tag.check_access(current_time)
-    # print(f"can_access={can_access}")
     if can_access:
         logger.info(f"Allowing access to Tag ID: {tag.tag_id}")
-        open_door(settings.RPI_GPIO_PIN_OPEN, settings.RPI_TIME_SIGNAL_OPEN)
-        logger.debug("Door Opened")
+        door = get_door()
+        door.open_door()
     else:
         logger.info(f"Denying access to Tag ID: {tag.tag_id}")
     return can_access

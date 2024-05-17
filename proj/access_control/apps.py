@@ -1,4 +1,10 @@
+import logging
+import atexit
+
 from django.apps import AppConfig
+from access_control.rpi_gpio_conf import get_door
+
+logger = logging.getLogger(__name__)
 
 
 class AccessControlConfig(AppConfig):
@@ -6,7 +12,13 @@ class AccessControlConfig(AppConfig):
     name = 'access_control'
 
     def ready(self):
-        """Ensure GPIO is setup before the app is ready."""
-        # from access_control.rpi_gpio_conf import setup_gpio
-
-        # setup_gpio()
+        """Register `cleanup` with atexit."""
+        super().ready()
+        #
+        #
+        logger.info("atexit: registering GPIO cleanup when app is going to shutdown")
+        # 1. At start define the instance (singleton) that will be alive always
+        self.door = get_door()
+        # 2. Register the instance to cleanup
+        # This is the only way I found it worked or AttributeError raises.
+        atexit.register(self.door.cleanup)
