@@ -11,11 +11,11 @@ WORKDIR /app_root
 COPY ./requirements-prod.txt ./requirements.txt
 
 ## Install OS dependencies
-# build-essential is needed for RPi.GPIO
+# TODO: REMOVE build-essential is needed for RPi.GPIO
 # libpq-dev, python3-dev is for psycopg2-binary only in Raspberry Pi 1B
 ## --no-install-recommends,
 RUN apt-get update \
-    && apt-get install -y build-essential libpq-dev python3-dev \
+    && apt-get install -y libpq-dev python3-dev \
     && pip install --no-cache-dir -r requirements.txt \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
