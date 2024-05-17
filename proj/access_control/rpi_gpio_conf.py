@@ -22,19 +22,19 @@ class Singleton(type):
 
 
 class DoorPinGPIO(metaclass=Singleton):
-    """Singleton class to control the Raspberry Pi GPIO.
-
-    Args:
-        door_pin: GPIO pin number
-        gpio_hostname: hostname or IP address of the remote GPIO server.
-            example: 127.0.0.1
-        time_signal_open: time in seconds to set the pin output high then low.
-            Usually 1 second.
-    """
 
     def __init__(
         self, door_pin: int, gpio_hostname: str, time_signal_open: int
     ) -> None:
+        """Singleton class to control the Raspberry Pi GPIO.
+
+        Args:
+            door_pin: GPIO pin number
+            gpio_hostname: hostname or IP address of the remote GPIO server.
+                example: 127.0.0.1
+            time_signal_open: time in seconds to set the pin output high then low.
+                Usually 1 second.
+        """
         self.door_pin = door_pin
         self.gpio_hostname = gpio_hostname
         self.time_signal_open = time_signal_open

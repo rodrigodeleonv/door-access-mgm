@@ -1,6 +1,6 @@
 """This module control the Raspberry Pi GPIO
 
-Commented out because it's transicional to remote GPIO control.
+Test open the door.
 """
 
 import logging
