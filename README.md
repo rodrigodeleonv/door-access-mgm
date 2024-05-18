@@ -65,19 +65,18 @@ Remote GPIOs: <https://gpiozero.readthedocs.io/en/stable/remote_gpio.html>
 ## Raspberry Pi 1B with arm6l (32bits)
 poetry export -f requirements.txt --output requirements-prod.txt --without-hashes
 docker buildx build --platform linux/arm/v6,linux/arm64 \
-    -t rodmosh/door-access-mgm:rpi-0.2.1 \
+    -t rodmosh/door-access-mgm:rpi-0.3.1 \
     -t rodmosh/door-access-mgm:production \
     --push .
 
 ## use --load for add to local registry or --push
-# docker buildx build --platform linux/arm/v6 -t rodmosh/door-access-mgm:rpi-0.2.1 --load .
-# docker buildx build --platform linux/arm64 -t rodmosh/door-access-mgm:rpi-0.2.1 --push .
+# docker buildx build --platform linux/arm/v6 -t rodmosh/door-access-mgm:rpi-0.3.1 --load .
+# docker buildx build --platform linux/arm64 -t rodmosh/door-access-mgm:rpi-0.3.1 --push .
 
 ## Test architecture (in your x64 processor)
 docker run -e QEMU_CPU=arm1176 --platform linux/arm/v6 --rm -it python:3.11.9-slim-bullseye uname -m
-docker run -e QEMU_CPU=arm1176 --platform linux/arm/v6 --rm -it rodmosh/door-access-mgm:rpi-0.2.1 uname -m
+docker run -e QEMU_CPU=arm1176 --platform linux/arm/v6 --rm -it rodmosh/door-access-mgm:rpi-0.3.1 uname -m
 docker run --platform linux/arm64 --rm -it python:3.11.9-slim-bullseye bash
-docker run --platform linux/arm/v8 --rm -it python:3.11.9-slim-bullseye bash
 docker run --rm -it -e ENTRY_SKIP=1 rodmosh/door-access-mgm:production bash
 
 ## Clean cache
@@ -151,3 +150,13 @@ sudo netstat -tunpl
 sudo systemctl disable pigpiod
 sudo systemctl stop pigpiod
 ```
+
+## psycopg2 / psycopg2-binary
+
+Example of create an image: <https://wbarillon.medium.com/docker-python-image-with-psycopg2-installed-c10afa228016>
+
+[Build prerequisites](https://www.psycopg.org/docs/install.html#build-prerequisites)
+
+- C compiler
+- python3-dev
+- libpq-dev (and pg_config comes with)

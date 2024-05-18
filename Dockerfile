@@ -11,17 +11,23 @@ WORKDIR /app_root
 COPY ./requirements-prod.txt ./requirements.txt
 
 ## Install OS dependencies
-# TODO: REMOVE build-essential is needed for RPi.GPIO
-# libpq-dev, python3-dev is for psycopg2-binary only in Raspberry Pi 1B
-## --no-install-recommends,
+## psycopg2 or psycopg2-binary requires lots of dependencies
+# libpq-dev -> psycopg2-binary
+# python3-dev -> psycopg2-binary
+# gcc -> psycopg2-binary
+##
 RUN apt-get update \
-    && apt-get install -y libpq-dev python3-dev \
+    && apt-get install -y --no-install-recommends \
+    gcc \
+    libpq-dev \
+    python3-dev \
     && pip install --no-cache-dir -r requirements.txt \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
 
 FROM --platform=$TARGETPLATFORM python:3.11.9-slim-bullseye
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 WORKDIR /app_root
 COPY --from=builder /bin /bin
 COPY --from=builder /usr/local/bin /usr/local/bin
@@ -29,7 +35,7 @@ COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/pytho
 COPY ./entrypoint.sh ./
 COPY ./proj ./proj
 
-RUN apt-get update && apt-get install -y netcat libpq-dev\
+RUN apt-get update && apt-get install -y netcat libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8000

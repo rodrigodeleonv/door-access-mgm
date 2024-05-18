@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "door-access-mgm"
-version = "0.2.1"
+version = "0.3.1"
 description = ""
 authors = ["Rodrigo de León <r@example.com>"]
 readme = "README.md"
