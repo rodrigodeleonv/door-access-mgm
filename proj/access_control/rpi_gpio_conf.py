@@ -28,6 +28,10 @@ class DoorPinGPIO(metaclass=Singleton):
     ) -> None:
         """Singleton class to control the Raspberry Pi GPIO.
 
+        It's required to active the service for the Raspberry Pi GPIO:
+        - `sudo pigpiod`, no daemon.
+        - or `sudo systemctl start pigpiod` for deaemon. Read the pigpiod documentation.
+
         Args:
             door_pin: GPIO pin number
             gpio_hostname: hostname or IP address of the remote GPIO server.
@@ -43,7 +47,6 @@ class DoorPinGPIO(metaclass=Singleton):
         self.door = LED(settings.RPI_GPIO_PIN_OPEN, pin_factory=self.factory)
 
     def __del__(self):
-        logger.info("Deleting the DOOR")
         self.cleanup()
 
     def open_door(self) -> None:
@@ -61,11 +64,14 @@ class DoorPinGPIO(metaclass=Singleton):
         Require to register this method in apps.py use atexit.
         """
         logger.info("Clean up GPIO: set level to low")
-        self.door.off()
+        try:
+            self.door.off()
+        except AttributeError as e:
+            logger.error(f"No clean up made: {e}")
 
 
 def get_door() -> DoorPinGPIO:
-    """Use default settings to create the DoorPinGPIO.
+    """Shortcut. Use default settings to create the DoorPinGPIO.
 
     .. code-block:: python
 
@@ -73,6 +79,9 @@ def get_door() -> DoorPinGPIO:
 
     Returns:
         DoorPinGPIO singleton
+
+    Raises:
+        AttributeError if no connection to remote GPIO server.
     """
     return DoorPinGPIO(
         settings.RPI_GPIO_PIN_OPEN,

@@ -10,6 +10,12 @@ Features:
 
 ![Diagram 1](/docs/images/lab-door-system.drawio.png)
 
+```txt
+POST https://<SERVER_HOST>/api/v0/tags/verify_tag/
+data: {"tag_id": "XYZ"}
+Require authentication
+```
+
 ## Install
 
 Docker & Docker compose
@@ -77,7 +83,10 @@ docker buildx build --platform linux/arm/v6,linux/arm64 \
 docker run -e QEMU_CPU=arm1176 --platform linux/arm/v6 --rm -it python:3.11.9-slim-bullseye uname -m
 docker run -e QEMU_CPU=arm1176 --platform linux/arm/v6 --rm -it rodmosh/door-access-mgm:rpi-0.3.1 uname -m
 docker run --platform linux/arm64 --rm -it python:3.11.9-slim-bullseye bash
+
+# Test on target platform (ARM)
 docker run --rm -it -e ENTRY_SKIP=1 rodmosh/door-access-mgm:production bash
+docker compose exec web_app bash
 
 ## Clean cache
 docker buildx prune -f
@@ -141,15 +150,26 @@ cat /lib/systemd/system/pigpiod.service
 [How to Run pigpiod on boot](https://raspberrypi.stackexchange.com/questions/70568/how-to-run-pigpiod-on-boot)
 
 ```bash
+# Enable the service. It uses pigpio -l (only local)
 sudo systemctl enable pigpiod
 sudo systemctl start pigpiod
+
+# Disable the service
+sudo systemctl disable pigpiod
+sudo systemctl stop pigpiod
+
+# Or use ephimeral for test. The service is not enabled or started
+# It allow external conections
 sudo pigpiod
 
 sudo netstat -tunpl
-
-sudo systemctl disable pigpiod
-sudo systemctl stop pigpiod
 ```
+
+### Remote GPIO with RPi.GPIO and FastAPI
+
+Another way to get remote gpio control example:
+
+<https://tutorials-raspberrypi.com/control-all-gpios-with-the-raspberry-pi-rest-api-via-python/>
 
 ## psycopg2 / psycopg2-binary
 
